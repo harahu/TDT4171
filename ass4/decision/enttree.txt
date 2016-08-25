@@ -1,0 +1,31 @@
+NODE('test'): 0
+	NODE('1')
+	NODE('test'): 4
+		NODE('test'): 2
+			NODE('test'): 1
+				NODE('1')
+				NODE('2')
+			NODE('test'): 1
+				NODE('2')
+				NODE('1')
+		NODE('test'): 5
+			NODE('test'): 1
+				NODE('test'): 2
+					NODE('1')
+					NODE('2')
+				NODE('test'): 2
+					NODE('2')
+					NODE('1')
+			NODE('test'): 3
+				NODE('test'): 1
+					NODE('test'): 2
+						NODE('1')
+						NODE('2')
+					NODE('test'): 2
+						NODE('2')
+						NODE('1')
+				NODE('test'): 1
+					NODE('2')
+					NODE('test'): 2
+						NODE('2')
+						NODE('1')

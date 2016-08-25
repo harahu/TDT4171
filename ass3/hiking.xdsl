@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<smile version="1.0" id="Network3" numsamples="1000" discsamples="10000">
+	<nodes>
+		<cpt id="Weather">
+			<state id="Sunny" />
+			<state id="Rain" />
+			<probabilities>0.5 0.5</probabilities>
+		</cpt>
+		<decision id="Path">
+			<state id="Track1" />
+			<state id="Track2" />
+		</decision>
+		<cpt id="View">
+			<state id="Nice" />
+			<state id="Bad" />
+			<parents>Path</parents>
+			<probabilities>0.5 0.5 0.5 0.5</probabilities>
+		</cpt>
+		<cpt id="Path_Quality">
+			<state id="Good" />
+			<state id="Bad" />
+			<parents>Path</parents>
+			<probabilities>0.5 0.5 0.5 0.5</probabilities>
+		</cpt>
+		<cpt id="Forecast">
+			<state id="Sunny" />
+			<state id="Cloudy" />
+			<state id="Rainy" />
+			<parents>Weather</parents>
+			<probabilities>0.6923076923076923 0.2307692307692308 0.07692307692307687 0.09090909090909091 0.2727272727272727 0.6363636363636364</probabilities>
+		</cpt>
+		<cpt id="Length">
+			<state id="Long" />
+			<state id="Short" />
+			<parents>Path</parents>
+			<probabilities>1 0 0 1</probabilities>
+		</cpt>
+		<cpt id="Shape">
+			<state id="Good" />
+			<state id="Bad" />
+			<probabilities>0.8 0.2</probabilities>
+		</cpt>
+		<cpt id="Exhaustion">
+			<state id="Yes" />
+			<state id="No" />
+			<parents>Shape Length</parents>
+			<probabilities>0.2 0.8 0.03000000000000003 0.97 0.6 0.4 0.2 0.8</probabilities>
+		</cpt>
+		<cpt id="Injury">
+			<state id="Yes" />
+			<state id="No" />
+			<parents>Length Path_Quality</parents>
+			<probabilities>0.03 0.97 0.1 0.9 0.01 0.99 0.03 0.97</probabilities>
+		</cpt>
+		<cpt id="Time">
+			<state id="Long" />
+			<state id="Short" />
+			<parents>Length Path_Quality</parents>
+			<probabilities>0.6 0.4 0.8 0.2 0.1 0.9 0.3 0.7</probabilities>
+		</cpt>
+		<cpt id="Food">
+			<state id="Yes" />
+			<state id="No" />
+			<probabilities>0.5 0.5</probabilities>
+		</cpt>
+		<cpt id="Hunger">
+			<state id="Yes" />
+			<state id="No" />
+			<parents>Time Food</parents>
+			<probabilities>0.1 0.9 0.7 0.3 0.02 0.98 0.2 0.8</probabilities>
+		</cpt>
+		<utility id="Enjoyment">
+			<parents>View Hunger Weather Length</parents>
+			<utilities>900 900 15 25 1500 1000 90 100 50 70 9 10 500 500 50 50</utilities>
+		</utility>
+		<cpt id="Cold">
+			<state id="Yes" />
+			<state id="No" />
+			<parents>Weather Time</parents>
+			<probabilities>0.01 0.99 0 1 0.7 0.3 0.2 0.8</probabilities>
+		</cpt>
+		<cpt id="Percieved_Shape">
+			<state id="Good" />
+			<state id="Bad" />
+			<parents>Shape</parents>
+			<probabilities>0.95 0.05000000000000004 0.2 0.8</probabilities>
+		</cpt>
+		<utility id="Risk">
+			<parents>Exhaustion Injury Cold</parents>
+			<utilities>500 300 200 100 250 150 50 10</utilities>
+		</utility>
+		<mau id="Utility">
+			<parents>Enjoyment Risk</parents>
+			<weights>1 -1</weights>
+		</mau>
+	</nodes>
+	<extensions>
+		<genie version="1.0" app="GeNIe 2.0.5590.0" name="Network3" faultnameformat="nodestate">
+			<node id="Weather">
+				<name>Weather</name>
+				<interior color="ff0000" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>1173 305 1229 340</position>
+			</node>
+			<node id="View">
+				<name>View</name>
+				<interior color="ff0000" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>1057 237 1102 265</position>
+			</node>
+			<node id="Path_Quality">
+				<name>Path Quality</name>
+				<interior color="ff0000" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>809 236 878 279</position>
+			</node>
+			<node id="Forecast">
+				<name>Forecast</name>
+				<interior color="00ff00" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>1174 237 1231 272</position>
+			</node>
+			<node id="Length">
+				<name>Length</name>
+				<interior color="00ff00" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>951 233 1000 263</position>
+			</node>
+			<node id="Shape">
+				<name>Shape</name>
+				<interior color="ff0000" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>774 365 822 395</position>
+			</node>
+			<node id="Exhaustion">
+				<name>Exhaustion</name>
+				<interior color="ff0000" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>845 415 911 456</position>
+			</node>
+			<node id="Injury">
+				<name>Injury</name>
+				<interior color="ff0000" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>856 331 901 359</position>
+			</node>
+			<node id="Path">
+				<name>Path</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>957 168 996 194</position>
+			</node>
+			<node id="Time">
+				<name>Time</name>
+				<interior color="ff0000" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>963 315 1005 341</position>
+			</node>
+			<node id="Food">
+				<name>Food</name>
+				<interior color="00ff00" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>1030 449 1073 475</position>
+			</node>
+			<node id="Hunger">
+				<name>Hunger</name>
+				<interior color="ff0000" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>980 384 1031 415</position>
+			</node>
+			<node id="Percieved_Shape">
+				<name>Percieved Shape</name>
+				<interior color="00ff00" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>726 284 819 342</position>
+			</node>
+			<node id="Enjoyment">
+				<name>Enjoyment</name>
+				<interior color="00ccff" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>1091 342 1164 374</position>
+			</node>
+			<node id="Cold">
+				<name>Cold</name>
+				<interior color="ff0000" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>1098 432 1139 457</position>
+			</node>
+			<node id="Risk">
+				<name>Risk</name>
+				<interior color="00ccff" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>1023 503 1063 535</position>
+			</node>
+			<node id="Utility">
+				<name>Utility</name>
+				<interior color="3366ff" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>1187 421 1232 453</position>
+			</node>
+		</genie>
+	</extensions>
+</smile>
