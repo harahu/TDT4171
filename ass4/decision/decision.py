@@ -16,15 +16,15 @@ class Node:
         self.attribute = attribute
         self.children = []
 
-    def classifyExample(self, example):
+    def classify_example(self, example):
         if self.ndtype == "test":
-            return self.children[example[self.attribute] - 1].classifyExample(example)
+            return self.children[example[self.attribute] - 1].classify_example(example)
         elif self.ndtype == "1":
             return 1
         else:
             return 2
 
-    def printNode(self, indentation):
+    def print_node(self, indentation):
         prstr = ""
         for i in range(indentation):
             prstr += "\t"
@@ -33,13 +33,13 @@ class Node:
             prstr += ": " + repr(self.attribute)
         print(prstr)
 
-    def printTree(self, indentation):
-        self.printNode(indentation)
+    def print_tree(self, indentation):
+        self.print_node(indentation)
         for c in self.children:
-            c.printTree(indentation + 1)
+            c.print_tree(indentation + 1)
 
 
-def pluralityValue(examples):
+def plurality_value(examples):
     c1 = 0
     c2 = 0
     for e in examples:
@@ -54,7 +54,7 @@ def pluralityValue(examples):
         return Node("2")
 
 
-def uniformClass(examples):
+def uniform_class(examples):
     uniform = True
     for e in examples[1:]:
         if e[7] != examples[0][7]:
@@ -62,7 +62,9 @@ def uniformClass(examples):
     return uniform
 
 
-def importanceRand(attribute, examples):
+def importance_rand(attribute, examples):
+    del attribute
+    del examples
     return random.random()
 
 
@@ -72,7 +74,7 @@ def b(q):
     return -(q * math.log(q, 2) + (1 - q) * math.log((1 - q), 2))
 
 
-def setEntr(examples):
+def set_entr(examples):
     p = 0
     for e in examples:
         if e[7] == 1:
@@ -80,8 +82,8 @@ def setEntr(examples):
     return b(p / len(examples))
 
 
-def importanceEntr(attribute, examples):
-    goal = setEntr(examples)
+def importance_entr(attribute, examples):
+    goal = set_entr(examples)
     l1 = []
     l2 = []
     for e in examples:
@@ -89,25 +91,25 @@ def importanceEntr(attribute, examples):
             l1.append(e)
         else:
             l2.append(e)
-    remainder = (len(l1) / len(examples)) * setEntr(l1) + (
+    remainder = (len(l1) / len(examples)) * set_entr(l1) + (
         len(l2) / len(examples)
-    ) * setEntr(l2)
+    ) * set_entr(l2)
     gain = goal - remainder
     return gain
 
 
-def importance(attribute, examples, impType):
-    if impType:
-        return importanceEntr(attribute, examples)
+def importance(attribute, examples, imp_type):
+    if imp_type:
+        return importance_entr(attribute, examples)
     else:
-        return importanceRand(attribute, examples)
+        return importance_rand(attribute, examples)
 
 
-def decisionTreeLearning(examples, attributes, parent_examples, impType):
+def decision_tree_learning(examples, attributes, parent_examples, imp_type):
     if len(examples) == 0:
-        return pluralityValue(parent_examples)
+        return plurality_value(parent_examples)
 
-    elif uniformClass(examples):
+    elif uniform_class(examples):
         if examples[0][7] == 1:
             tree = Node("1")
         else:
@@ -115,102 +117,102 @@ def decisionTreeLearning(examples, attributes, parent_examples, impType):
         return tree
 
     elif len(attributes) == 0:
-        return pluralityValue(examples)
+        return plurality_value(examples)
 
     else:
-        msAttribute = -1
+        ms_attribute = -1
         val = -1
         for a in attributes:
-            aval = importance(a, examples, impType)
+            aval = importance(a, examples, imp_type)
             if aval > val:
-                msAttribute = a
+                ms_attribute = a
                 val = aval
 
-        tree = Node("test", msAttribute)
+        tree = Node("test", ms_attribute)
 
         for v in [1, 2]:
             vexs = []
             for e in examples:
-                if e[msAttribute] == v:
+                if e[ms_attribute] == v:
                     vexs.append(e)
-            remAttr = list(attributes)
-            remAttr.remove(msAttribute)
+            rem_attr = list(attributes)
+            rem_attr.remove(ms_attribute)
 
-            subtree = decisionTreeLearning(vexs, remAttr, examples, impType)
+            subtree = decision_tree_learning(vexs, rem_attr, examples, imp_type)
 
             tree.children.append(subtree)
 
         return tree
 
 
-def extractExamples(file):
-    f = open(file, "r")
-    examples = []
-    for l in f:
-        example = []
-        for c in l:
-            try:
-                example.append(int(c))
-            except:
-                pass
-        examples.append(example)
+def extract_examples(file):
+    with open(file, "r") as f:
+        examples = []
+        for line in f:
+            example = []
+            for c in line:
+                try:
+                    example.append(int(c))
+                except ValueError:
+                    pass
+            examples.append(example)
     return examples
-    f.close()
 
 
-def writeTree(tree, file):
+def write_tree(tree, file):
     std = sys.stdout
     sys.stdout = open(file, "w")
-    tree.printTree(0)
+    tree.print_tree(0)
     sys.stdout.close()
     sys.stdout = std
 
 
 def main():
-    examples = extractExamples("training.txt")
-    testdata = extractExamples("test.txt")
+    examples = extract_examples("training.txt")
+    test_data = extract_examples("test.txt")
     attributes = [0, 1, 2, 3, 4, 5, 6]
-    treeRnd = decisionTreeLearning(examples, attributes, [], False)
-    treeEnt = decisionTreeLearning(examples, attributes, [], True)
+    tree_rnd = decision_tree_learning(examples, attributes, [], False)
+    tree_ent = decision_tree_learning(examples, attributes, [], True)
 
-    writeTree(treeRnd, "rndtree.txt")
-    writeTree(treeEnt, "enttree.txt")
+    write_tree(tree_rnd, "rndtree.txt")
+    write_tree(tree_ent, "enttree.txt")
 
     errs = []
     for i in range(100):
-        treeRnd = decisionTreeLearning(examples, attributes, [], False)
+        tree_rnd = decision_tree_learning(examples, attributes, [], False)
         rc = 0
-        for e in testdata:
-            if e[7] != treeRnd.classifyExample(e):
+        for e in test_data:
+            if e[7] != tree_rnd.classify_example(e):
                 rc += 1
         errs.append(rc)
     print("Low:")
-    print(str(min(errs)))
+    print(min(errs))
     print("Average:")
-    print(str(sum(errs) / len(errs)))
+    print(sum(errs) / len(errs))
     print("High:")
-    print(str(max(errs)))
+    print(max(errs))
 
     rc = 0
     ec = 0
     print("Rnd:\tEnt:")
-    for e in testdata:
-        if e[7] != treeRnd.classifyExample(e):
+    for e in test_data:
+        if e[7] != tree_rnd.classify_example(e):
             rc += 1
-        if e[7] != treeEnt.classifyExample(e):
+        if e[7] != tree_ent.classify_example(e):
             ec += 1
         print(
             str(e[7])
-            + str(treeRnd.classifyExample(e))
+            + str(tree_rnd.classify_example(e))
             + "\t"
             + str(e[7])
-            + str(treeEnt.classifyExample(e))
+            + str(tree_ent.classify_example(e))
         )
     print("\n")
-    print("Total Error:")
-    print(str(rc) + "\t" + str(ec))
+    print("Total error:")
+    print(f"{rc}\t{ec}")
     print("of\tof")
-    print(str(len(testdata)) + "\t" + str(len(testdata)))
+    print(f"{len(test_data)}\t{len(test_data)}")
 
 
-main()
+if __name__ == "__main__":
+    main()
