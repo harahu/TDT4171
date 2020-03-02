@@ -2,7 +2,7 @@ __author__ = "kaiolae"
 __author__ = "kaiolae"
 import Backprop_skeleton as Bp
 
-# Class for holding your data - one object for each line in the dataset
+# Class for holding your data - one object for each line in the examples
 class dataInstance:
     def __init__(self, qid, rating, features):
         self.qid = qid  # ID of the query
@@ -27,7 +27,7 @@ class dataHolder:
 
     def loadData(self, file):
         # Input: A file with the data.
-        # Output: A dict mapping each query ID to the relevant documents, like this: dataset[queryID] = [dataInstance1, dataInstance2, ...]
+        # Output: A dict mapping each query ID to the relevant documents, like this: examples[queryID] = [dataInstance1, dataInstance2, ...]
         data = open(file)
         dataset = {}
         for line in data:
